@@ -163,7 +163,7 @@ class ManagerDeviceMenu(Gtk.Menu):
 
         self._appl.ConnectService('(os)', device.get_object_path(), uuid,
                                   result_handler=success, error_handler=fail,
-                                  timeout=GLib.MAXINT)
+                                  timeout=45000)
 
         prog.start()
 
@@ -183,7 +183,7 @@ class ManagerDeviceMenu(Gtk.Menu):
             return
 
         self._appl.DisconnectService('(osd)', device.get_object_path(), uuid, port,
-                                     result_handler=ok, error_handler=err, timeout=GLib.MAXINT)
+                                     result_handler=ok, error_handler=err, timeout=45000)
 
     def on_device_property_changed(self, lst: "ManagerDeviceList", _device: Device, tree_iter: Gtk.TreeIter,
                                    key_value: tuple[str, object]) -> None:
