@@ -109,10 +109,17 @@ class ManagerDeviceMenu(Gtk.Menu):
 
     def set_op(self, device: Device, message: str) -> None:
         ManagerDeviceMenu.__ops__[device.get_object_path()] = message
+        GLib.timeout_add(60000, self._op_timeout, device)
         for inst in ManagerDeviceMenu.__instances__:
             logging.info(f"op: regenerating instance {inst}")
             if inst.SelectedDevice == self.SelectedDevice and not (inst.is_popup and not inst.props.visible):
                 inst.generate()
+
+    def _op_timeout(self, device: Device) -> bool:
+        if device.get_object_path() in ManagerDeviceMenu.__ops__:
+            logging.warning(f"Operation timed out for {device.get_object_path()}")
+            self.unset_op(device)
+        return False
 
     def get_op(self, device: Device) -> str | None:
         try:
